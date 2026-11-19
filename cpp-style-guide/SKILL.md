@@ -12,7 +12,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 # C++ 代码风格与审查规则
 
 > 用途: 作为 C++ 代码生成, 修改, 重构和审查的默认规则.
-> 基线: Google C++ Style Guide 常用约定 + C++ Core Guidelines 共识 + 工程可维护性.
+> 基线: Google C++ Style Guide 常用约定 + C++ Core Guidelines 共识 + 项目命名 profile + 工程可维护性.
 > 标准: 不固定任何 C++ 标准版本. 语言标准由项目构建配置, 现有代码和 CI 决定.
 > 优先级: 正确性 > 可读性 > 性能; 一致性 > 个人偏好.
 > 冲突处理: 项目规范 > 团队约定 > 本文件 > 个人偏好.
@@ -150,7 +150,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 - 重载: 同一作用域中函数名相同, 参数列表不同.
 - 覆盖: 基类虚函数且完整签名匹配, 运行时多态.
 
-需要保留基类重载时使用 `using Base::Function;`.
+需要保留基类重载时使用 `using Base::function;`.
 
 4.8 **[必须]** 不重新定义继承而来的非虚函数. public 继承必须建模 is-a; 组合优于继承; 多重继承仅用于接口组合, 避免多实现继承和菱形继承.
 
@@ -174,7 +174,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 
 4.15 **[必须]** 不重载 `&&`, `||`, `,` 或一元 `&`. 不定义用户自定义字面量. 二元非修改运算符优先定义为非成员函数.
 
-4.16 **[版本相关]** 属性按语义使用: `[[nodiscard]]` 标记不可忽略的返回值, `[[maybe_unused]]` 标记确实未使用的实体, `[[fallthrough]]` 标记故意贯穿, `[[deprecated]]` 标记废弃接口, `[[noreturn]]` 标记不返回函数.
+4.16 **[版本相关]** 属性按语义使用: `[[maybe_unused]]` 标记确实未使用的实体, `[[fallthrough]]` 标记故意贯穿, `[[deprecated]]` 标记废弃接口, `[[noreturn]]` 标记不返回函数.
 
 4.17 **[必须]** `switch` 用于离散值分派, `if/else` 用于条件判断. `switch` 分支以 `break`, `return` 或 `[[fallthrough]]` 结束. 覆盖全部枚举值时可不写 `default`; 否则必须处理 `default`. 分支多且映射稳定时使用表驱动, 函数指针数组或 `constexpr` 映射.
 
@@ -324,35 +324,37 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 
 9.7 **[推荐]** `assert` 仅用于内部不变量和程序员错误, 不用于可恢复的运行时错误或外部输入校验.
 
-9.8 **[必须]** 不忽略标记为 `[[nodiscard]]` 的返回值. 确实需要忽略时显式转换为 `void` 并写明理由.
-
 ---
 
 ## 10. 命名
 
-10.1 **[Google]** 名称使用英文, 描述用途而不是实现. 避免不常见缩写和易混淆字符 `l`, `O`, `I`.
+本节是项目 C++ 命名 profile, 参考 `ApplicationLifecycle.h`, 不按 Google C++ 命名规则中的文件名, 函数名和枚举值处理. 跨语言规则见 `../naming-conventions/SKILL.md`.
 
-10.2 **[Google]** 文件名全部小写, 单词间使用下划线. 头文件 `.h`, 源文件 `.cc`.
+10.1 **[项目约定]** 名称使用英文, 描述用途而不是实现. 避免不常见缩写和易混淆字符 `l`, `O`, `I`.
 
-10.3 **[Google]** 类型, class, struct, enum, using 别名使用 `PascalCase`.
+10.2 **[项目约定]** 文件名使用 `PascalCase`, 与主类型或主职责一致. 头文件使用 `.h`, 源文件使用 `.cc` 或项目统一扩展名. 测试文件使用 `FooTest.cc`. 不使用 `utils`, `helpers`, `misc` 作为文件名.
 
-10.4 **[Google]** 普通变量, 参数和局部变量使用 `snake_case`; 短生命周期计数器可使用 `i`, `j`, `n`.
+10.3 **[项目约定]** 类型, class, struct, enum, using 别名使用 `PascalCase`.
 
-10.5 **[Google]** 类数据成员使用 `snake_case_`; struct 数据成员使用 `snake_case`, 不加尾随下划线.
+10.4 **[项目约定]** 普通变量, 参数和局部变量使用 `snake_case`; 短生命周期计数器可使用 `i`, `j`, `n`.
 
-10.6 **[Google]** 常量使用 `k` 加 `PascalCase`; 枚举值同样使用 `kPascalCase`.
+10.5 **[项目约定]** 类数据成员使用 `snake_case_`; struct 数据成员使用 `snake_case`, 不加尾随下划线.
 
-10.7 **[Google]** 函数和方法使用 `PascalCase`. 访问器和修改器遵循项目统一约定, 常见形式为 `foo()` / `set_foo()`.
+10.6 **[项目约定]** 常量使用 `k` 加 `PascalCase`; 枚举值使用 `PascalCase`, 不加 `k` 前缀.
 
-10.8 **[Google]** 命名空间使用 `snake_case`; 内部实现可使用带库名限定的 `internal` 命名空间.
+10.7 **[项目约定]** 函数和方法使用 `snake_case`. 访问器直接使用名词, 如 `state()`; 修改器使用 `set_` 前缀, 如 `set_state()`; 布尔谓词使用 `is_` / `has_` / `can_` / `should_`.
 
-10.9 **[Google]** 类型模板参数使用 `PascalCase`, 常用单字母 `T`, `U`, `V`; 标准支持 concepts 时 concept 名也使用 `PascalCase`.
+10.8 **[项目约定]** 命名空间使用 `snake_case`; 内部实现可使用带库名限定的 `internal` 命名空间.
 
-10.10 **[Google]** 宏使用全大写加下划线, 并带项目前缀. 宏仅用于条件编译和头文件守卫, 不用宏定义常量或函数.
+10.9 **[项目约定]** 类型模板参数使用 `PascalCase`, 常用单字母 `T`, `U`, `V`; 标准支持 concepts 时 concept 名也使用 `PascalCase`.
 
-10.11 **[Google]** 类型别名使用 `PascalCase`. 不使用 `typedef`, 统一使用 `using`.
+10.10 **[项目约定]** 宏使用全大写加下划线, 并带项目前缀. 宏仅用于条件编译和头文件守卫, 不用宏定义常量或函数.
+
+10.11 **[项目约定]** 类型别名使用 `PascalCase`. 不使用 `typedef`, 统一使用 `using`.
 
 10.12 **[必须]** 引用标准库, 系统 API 或第三方库名称时保留其原始拼写, 不为满足本项目命名规则而改名.
+
+10.13 **[项目约定]** 文件改名为 `PascalCase` 时, 同步修改 include, 构建脚本, 测试和文档. Windows 上做仅大小写改名时先改成临时名, 再改成目标名.
 
 ---
 
@@ -413,8 +415,8 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 - 公共 API 明确拷贝和移动语义, 避免切片.
 - 优先返回值, 输入参数在输出参数之前.
 - 不重载 `&&`, `||`, `,`, 一元 `&`, 不定义用户自定义字面量.
-- 类数据成员尾随 `_`, struct 数据成员不尾随 `_`.
-- 函数名 `PascalCase`, 变量 `snake_case`, 常量 `kPascalCase`.
+- 文件名 `PascalCase`, 类数据成员尾随 `_`, struct 数据成员不尾随 `_`.
+- 函数和方法 `snake_case`, 变量 `snake_case`, 常量 `kPascalCase`, 枚举值 `PascalCase`.
 - 注释解释意图, TODO 必须有负责人或追踪项.
 - Google 格式化基线为 80 列, 2 空格, 无制表符.
 - 项目采用 Google 内部模式时禁用异常和 RTTI, 否则按项目错误策略执行.
@@ -432,7 +434,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 - **C 接口问题**: `rand()`, `atoi`, `sprintf` 到固定缓冲区, 以及优先使用 C 头文件而不是对应 C++ 设施的写法.
 - **STL 问题**: `map::operator[]` 误用, `remove` 后不 `erase`, 比较器不满足严格弱序, 默认 Lambda 捕获跨生命周期.
 - **并发问题**: 手动 lock/unlock, 条件变量不带谓词, `volatile` 做同步, detach 线程访问已销毁状态.
-- **错误处理问题**: `catch (...)` 吞异常, 析构抛异常, `noexcept` 中放任异常, 忽略 `[[nodiscard]]`.
+- **错误处理问题**: `catch (...)` 吞异常, 析构抛异常, `noexcept` 中放任异常, 忽略必须处理的返回值.
 - **接口问题**: 隐式转换, 未说明所有权, 未说明线程安全, 用输出参数替代清晰返回值.
 - **维护问题**: 注释掉的代码, 无负责人 TODO, 过期注释, 与项目格式和命名不一致.
 - **废弃特性**: `std::auto_ptr`, `std::random_shuffle`, `std::bind1st` / `std::bind2nd`, `std::ptr_fun` / `std::mem_fun`, `std::unary_function` / `std::binary_function`, `std::iterator` 基类, 动态异常说明, `register`, 已废弃的 C 兼容头文件.
