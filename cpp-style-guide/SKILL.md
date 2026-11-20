@@ -328,7 +328,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 
 ## 10. 命名
 
-本节是项目 C++ 命名 profile, 参考 `ApplicationLifecycle.h`, 不按 Google C++ 命名规则中的文件名, 函数名和枚举值处理. 跨语言规则见 `../naming-conventions/SKILL.md`.
+本节是项目 C++ 命名 profile, 参考 `ApplicationLifecycle.h`, 不按 Google C++ 命名规则中的文件名, 函数名和枚举值处理.
 
 10.1 **[项目约定]** 名称使用英文, 描述用途而不是实现. 避免不常见缩写和易混淆字符 `l`, `O`, `I`.
 
@@ -360,7 +360,7 @@ tags: [cpp, coding-style, google-style, code-review, refactoring]
 
 ## 11. 注释
 
-11.1 **[推荐]** 注释解释为什么, 约束, 不变量和反直觉行为, 不复述代码表面动作. 优先使用 `//`; 块注释只用于确实需要跨行说明的场景.
+11.1 **[推荐]** 注释解释为什么, 约束, 不变量和反直觉行为, 不复述代码表面动作. 普通说明和普通多行说明使用 `//` 逐行书写; `/** ... */` 仅用于项目明确采用的文档工具; `/* ... */` 仅用于 C89 兼容, 工具要求或临时禁用代码.
 
 11.2 **[Google]** 文件顶部说明文件职责, 必要时包含法律声明. 不写无维护价值的作者, 日期和修改记录.
 

@@ -16,20 +16,20 @@ tags: [cpp, cpp23, clang-tidy, static-analysis, code-quality]
 - 为 C++23 项目创建, 审查或修复 `.clang-tidy`.
 - 处理 clang-tidy 或 clangd 的警告, 误报和配置不生效.
 - 生成 C++23 代码后做静态检查, 确认检查建议没有超出标准或项目工具链能力.
-- 需要与 `cpp-style-guide` 保持一致的命名, 安全, 所有权和并发规则.
+- 需要与项目现有 C++ 命名, 安全, 所有权和并发规则保持一致.
 
-## 与核心风格的关系
+## 与项目规范的关系
 
-`../cpp-style-guide/SKILL.md` 定义代码应该是什么样. 本技能只负责如何用 clang-tidy 检查它.
+项目现有 C++ 规范定义代码应该是什么样. 本技能只负责如何用 clang-tidy 检查它, 不重新定义代码风格.
 
 优先级:
 
 1. 用户当前任务和项目明确配置.
-2. `cpp-style-guide` 的代码规则.
+2. 项目现有 C++ 代码规则.
 3. 本技能的静态分析基线.
 4. clang-tidy 默认行为.
 
-发生冲突时, 核心风格优先. 不为了消除警告而违反核心风格, 也不为了让 modernize 警告消失而使用项目工具链不支持的库设施.
+发生冲突时, 项目现有规范优先. 不为了消除警告而违反项目现有规范, 也不为了让 modernize 警告消失而使用项目工具链不支持的库设施.
 
 本技能吸收了桌面 clang-tidy 基线中的以下规则:
 
@@ -227,7 +227,7 @@ CheckOptions:
 - `performance-*` 负责不必要拷贝, range copy, 值参数和低效容器操作.
 - `readability-*` 负责大括号, 命名, const 使用, 布尔表达式和可维护性.
 - `misc-*` 负责常见缺陷和未使用实体.
-- `google-*` 只启用与核心风格一致的检查: 禁止 `using namespace`, 单参数构造 `explicit`, 固定宽度整数, C 风格转换.
+- `google-*` 只启用与项目现有规范一致的检查: 禁止 `using namespace`, 单参数构造 `explicit`, 固定宽度整数, C 风格转换.
 - `modernize-*` 只启用 C++23 可用项, 不启用整套 `modernize-*`.
 - C++20/23 检查只在目标标准允许时启用: concepts, ranges, designated initializers, `std::format`, `std::print`, `std::bit_cast` 等.
 - `readability-container-contains` 在 C++23 中允许启用, 因为 `contains` 已可用.
@@ -252,7 +252,7 @@ CheckOptions:
 
 ## 使用步骤
 
-1. 读取核心风格, 项目构建文件, 现有 `.clang-tidy` 和 `.clang-format`.
+1. 读取项目现有规范, 项目构建文件, 现有 `.clang-tidy` 和 `.clang-format`.
 2. 确认项目确实以 C++23 编译, 且标准库支持计划使用的 C++20/23 设施.
 3. 将配置写入项目根目录, 按实际源码目录调整 `HeaderFilterRegex`.
 4. 验证配置:
@@ -289,7 +289,7 @@ clang-tidy -p build --config-file=.clang-tidy path/to/file.cc
 - 是否属于 C++23 兼容修改.
 - 若依赖可选库设施, 说明工具链条件.
 
-如果 clang-tidy 建议使用项目未启用的 C++26 特性, 必须标记为不可直接应用. 如果建议与核心风格冲突, 明确说明核心风格优先.
+如果 clang-tidy 建议使用项目未启用的 C++26 特性, 必须标记为不可直接应用. 如果建议与项目现有规范冲突, 明确说明项目现有规范优先.
 
 ## 快速审查清单
 
