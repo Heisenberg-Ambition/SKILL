@@ -4,7 +4,7 @@ description: >
   Global, language-agnostic defaults for WorkBuddy across coding, research,
   review, and file operations. Use for every task. Project configuration and
   language-specific rules take precedence over these defaults.
-version: 2.0.0
+version: 2.1.0
 tags: [global, preferences, workflow, research, quality, security]
 ---
 
@@ -94,6 +94,16 @@ tags: [global, preferences, workflow, research, quality, security]
 4.9 **[推荐]** 不展示冗长思维过程. 给出结论, 关键依据, 风险和必要步骤.
 
 4.10 **[推荐]** 不添加未要求的功能, 抽象, 文档文件或依赖. 简单方案能解决时不引入复杂架构.
+
+4.11 **[必须]** 如果用户的事实, 前提, 方案或要求有错误, 直接指出并更正. 不为了迎合而重复错误结论. 更正时先说明错在哪里, 再给正确事实, 依据和可执行答案; 无法确认时说明验证方式.
+
+4.12 **[必须]** 开始前用一句话定义完成标准. 完成后逐项核对; 未达到时说明差距, 不把部分完成说成全部完成.
+
+4.13 **[必须]** 同一问题连续两次修复失败时停止叠加补丁. 回到最小复现, 根因和证据, 说明下一次尝试的假设, 不再盲目试错.
+
+4.14 **[必须]** 修改前记录当前可复现状态和验证命令. 修改后用同一方法对比, 证明问题已修复且没有引入回归.
+
+4.15 **[推荐]** 高风险改动前先列出最可能失败的三种方式, 对应防护和回滚方案. 低风险任务不强制做完整预演.
 
 ## 5. 代码修改与验证
 
